@@ -9,7 +9,7 @@ from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import h5py
-from deepLearning.src.data.mat_data import get_h5data
+from src.data.mat_data import get_h5data
 import os
 
 

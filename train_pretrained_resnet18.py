@@ -1,4 +1,4 @@
-from deepLearning.src.models.Resnet import PretrainedResnet
+from src.models.Resnet import PretrainedResnet
 from fnmatch import fnmatch
 
 Net = PretrainedResnet(dim_out=2)

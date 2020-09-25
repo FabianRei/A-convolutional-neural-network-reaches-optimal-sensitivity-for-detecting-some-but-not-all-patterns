@@ -3,7 +3,7 @@ import numpy as np
 import h5py
 import torch
 from skimage.util import view_as_blocks
-from deepLearning.src.data.create_complex_pattern import create_automaton
+from src.data.create_complex_pattern import create_automaton
 
 
 def get_mat_data(pathMat, shuffle=False):

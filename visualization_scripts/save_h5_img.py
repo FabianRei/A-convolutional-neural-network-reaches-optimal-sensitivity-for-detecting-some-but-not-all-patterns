@@ -1,4 +1,4 @@
-from deepLearning.src.data.mat_data import get_h5mean_data
+from src.data.mat_data import get_h5mean_data
 from matplotlib import pyplot as plt
 import scipy.misc
 import os

@@ -1,7 +1,7 @@
 from sklearn import svm
 import numpy as np
-from deepLearning.src.data.mat_data import get_h5mean_data, poisson_noise_loader
-from deepLearning.src.models.optimal_observer import calculate_dprime
+from src.data.mat_data import get_h5mean_data, poisson_noise_loader
+from src.models.optimal_observer import calculate_dprime
 import os
 import csv
 import datetime

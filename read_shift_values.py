@@ -1,5 +1,5 @@
 from glob import glob
-from deepLearning.src.data.mat_data import get_h5mean_data
+from src.data.mat_data import get_h5mean_data
 import os
 
 pathMatDir = '/share/wandell/data/reith/matlabData/shift_contrast100/'

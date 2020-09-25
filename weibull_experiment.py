@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 import os
-from deepLearning.src.analysis.weibull_alphas import get_alphas_fixed_beta
+from src.analysis.weibull_alphas import get_alphas_fixed_beta
 
 
 def get_csv_column(csv_path, col_name, sort_by=None, exclude_from=None):

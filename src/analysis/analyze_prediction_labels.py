@@ -1,4 +1,4 @@
-from deepLearning.src.models.optimal_observer import get_optimal_observer_acc, calculate_dprime
+from src.models.optimal_observer import get_optimal_observer_acc, calculate_dprime
 import numpy as np
 import pickle
 

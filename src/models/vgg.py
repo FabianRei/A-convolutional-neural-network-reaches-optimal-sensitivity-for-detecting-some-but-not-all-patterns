@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
 import torch
-from deepLearning.src.models.Resnet import NotPretrainedResnet
+from src.models.Resnet import NotPretrainedResnet
 
 def make_layers(cfg, batch_norm=False):
     layers = []

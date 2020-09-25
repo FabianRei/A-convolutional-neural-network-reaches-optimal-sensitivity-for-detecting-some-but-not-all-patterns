@@ -2,9 +2,9 @@ from torch.autograd import Variable
 import numpy as np
 import torch
 
-from deepLearning.src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm, get_optimal_observer_acc_parallel, calculate_dprime
+from src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm, get_optimal_observer_acc_parallel, calculate_dprime
 
-from deepLearning.src.data.mat_data import poisson_noise_loader, mat_data_loader, PoissonNoiseLoaderClass
+from src.data.mat_data import poisson_noise_loader, mat_data_loader, PoissonNoiseLoaderClass
 
 
 def test(batchSize, testData, testLabels, Net, dimIn, includePredictionLabels=False, test_eval=False):

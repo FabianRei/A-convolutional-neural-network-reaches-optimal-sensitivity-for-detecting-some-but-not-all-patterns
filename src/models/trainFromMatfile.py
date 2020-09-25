@@ -5,12 +5,12 @@ if __name__ == '__main__':
     parent_dir = os.path.dirname(current_dir)
     sys.path.insert(0, parent_dir)
 
-from deepLearning.src.models.resnet_train_test import train_poisson, test
-from deepLearning.src.models.GrayResNet import GrayResnet18, GrayResnet101
-from deepLearning.src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm, get_optimal_observer_acc_parallel, calculate_dprime
-from deepLearning.src.data.mat_data import get_h5mean_data, poisson_noise_loader, PoissonNoiseLoaderClass, shuffle_pixels as shuffle_pixels_func, shuffle_1d
-from deepLearning.src.data.logger import Logger, CsvWriter
-from deepLearning.src.models.support_vector_machine import score_svm
+from src.models.resnet_train_test import train_poisson, test
+from src.models.GrayResNet import GrayResnet18, GrayResnet101
+from src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm, get_optimal_observer_acc_parallel, calculate_dprime
+from src.data.mat_data import get_h5mean_data, poisson_noise_loader, PoissonNoiseLoaderClass, shuffle_pixels as shuffle_pixels_func, shuffle_1d
+from src.data.logger import Logger, CsvWriter
+from src.models.support_vector_machine import score_svm
 import torch
 import torch.nn as nn
 from torch import optim
@@ -23,17 +23,17 @@ import datetime
 import pickle
 from scipy.stats import norm
 import multiprocessing as mp
-from deepLearning.src.models.new_vgg import vgg16, vgg16bn
+from src.models.new_vgg import vgg16, vgg16bn
 
 
 
-def autoTrain_Resnet_optimalObserver(pathMat, device=None, lock=None, train_nn=True, include_shift=False,
-                                     deeper_pls=False, oo=True, svm=True, NetClass=None, NetClass_param=None,
-                                     include_angle=False, training_csv=True, num_epochs=30, initial_lr=0.001, lr_deviation=0.1,
-                                     lr_epoch_reps=3, them_cones=False, separate_rgb=False, meanData_rounding=None,
-                                     shuffled_pixels=0, shuffle_scope=-1, test_eval=True, random_seed_nn=True, train_set_size=-1,
-                                     test_size=5000, shuffle_portion=-1, ca_rule=-1, force_balance=False,
-                                     same_test_data_shuff_pixels=True, class_balance='class_based', random_seed=42):
+def train_cnn_svm_optimal_observer(pathMat, device=None, lock=None, train_nn=True, include_shift=False,
+                                   deeper_pls=False, oo=True, svm=True, NetClass=None, NetClass_param=None,
+                                   include_angle=False, training_csv=True, num_epochs=30, initial_lr=0.001, lr_deviation=0.1,
+                                   lr_epoch_reps=3, them_cones=False, separate_rgb=False, meanData_rounding=None,
+                                   shuffled_pixels=0, shuffle_scope=-1, test_eval=True, random_seed_nn=True, train_set_size=-1,
+                                   test_size=5000, shuffle_portion=-1, ca_rule=-1, force_balance=False,
+                                   same_test_data_shuff_pixels=True, class_balance='class_based', random_seed=42):
 
 
     # relevant variables
@@ -309,7 +309,7 @@ if __name__ == '__main__':
     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\more_nn_backup\vgg\class_2_rule_3_5\2_samplesPerClass_freq_1_contrast_0_002511886432_image_automata_rule_3_class2.h5'
     mat_path = '/share/wandell/data/reith/redo_experiments/more_nn/vgg/class_2_rule_3_5/2_samplesPerClass_freq_1_contrast_0_001258925412_image_automata_rule_3_class2.h5'
     mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\redo_automaton\matlab_contrasts\automata_rule_22_class3\2_samplesPerClass_freq_1_contrast_0_019952623150_image_automata_rule_22_class3.h5'
-    autoTrain_Resnet_optimalObserver(mat_path, shuffled_pixels=False, test_size=400,  train_nn=True, oo=False, svm=False, NetClass=vgg16)
+    train_cnn_svm_optimal_observer(mat_path, shuffled_pixels=False, test_size=400, train_nn=True, oo=False, svm=False, NetClass=vgg16)
     # autoTrain_Resnet_optimalObserver(mat_path, force_balance=True, shuffled_pixels=-2)
     # autoTrain_Resnet_optimalObserver(mat_path, shuffled_pixels=-2)
     # autoTrain_Resnet_optimalObserver(mat_path, shuffled_pixels=True, shuffle_scope=100, train_set_size=150, oo=False, svm=False, test_size=60, train_nn=True, shuffle_portion=2000)

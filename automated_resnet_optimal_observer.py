@@ -1,5 +1,5 @@
-from deepLearning.src.models.trainFromMatfile import autoTrain_Resnet_optimalObserver
-from deepLearning.src.models.Resnet import PretrainedResnetFrozen
+from src.models.trainFromMatfile import train_cnn_svm_optimal_observer
+from src.models.Resnet import PretrainedResnetFrozen
 from glob import glob
 import time
 import datetime
@@ -13,10 +13,10 @@ programStart = time.time()
 for matFile in matFiles:
     if matFile[-5:-3] == 'oo':
         print(f"Only optimal observer for: {matFile}")
-        autoTrain_Resnet_optimalObserver(matFile, train_nn=False, include_shift=True)
+        train_cnn_svm_optimal_observer(matFile, train_nn=False, include_shift=True)
     else:
         print(matFile)
-        autoTrain_Resnet_optimalObserver(matFile, train_nn=True, include_shift=False, deeper_pls=False, oo=True, NetClass=PretrainedResnetFrozen)
+        train_cnn_svm_optimal_observer(matFile, train_nn=True, include_shift=False, deeper_pls=False, oo=True, NetClass=PretrainedResnetFrozen)
 
 
 programEnd = time.time()

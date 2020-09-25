@@ -1,4 +1,4 @@
-from deepLearning.src.data.create_complex_pattern import create_automaton
+from src.data.create_complex_pattern import create_automaton
 import h5py
 import numpy as np
 import os

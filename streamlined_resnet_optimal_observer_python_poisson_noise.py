@@ -1,9 +1,9 @@
-from deepLearning.src.models.resnet_train_test import train, train_poisson
-from deepLearning.src.models.GrayResNet import GrayResnet18
-from deepLearning.src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm
+from src.models.resnet_train_test import train, train_poisson
+from src.models.GrayResNet import GrayResnet18
+from src.models.optimal_observer import get_optimal_observer_acc, calculate_discriminability_index, get_optimal_observer_hit_false_alarm
 import torch
 from torch.autograd import Variable
-from deepLearning.src.data.logger import Logger
+from src.data.logger import Logger
 import torch.nn as nn
 import torch.nn.functional as F
 from torch import optim
@@ -15,7 +15,7 @@ from scipy.stats import lognorm
 import torchvision.models as models
 
 
-from deepLearning.src.data.mat_data import get_mat_data, get_h5data, get_h5mean_data, poisson_noise_loader
+from src.data.mat_data import get_mat_data, get_h5data, get_h5mean_data, poisson_noise_loader
 
 # relevant variables
 test_interval = 2

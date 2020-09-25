@@ -6,7 +6,7 @@ import bisect
 import types
 from matplotlib.ticker import ScalarFormatter
 import itertools
-from deepLearning.src.analysis. weibull_alphas import ScaledWeibull, get_weibull_interpolation
+from src.analysis. weibull_alphas import ScaledWeibull, get_weibull_interpolation
 import csv
 
 
