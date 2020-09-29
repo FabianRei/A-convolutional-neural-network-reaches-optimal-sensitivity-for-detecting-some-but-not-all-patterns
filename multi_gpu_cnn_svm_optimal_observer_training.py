@@ -287,7 +287,6 @@ if __name__ == '__main__':
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 
-
 ################################################################
 ADDITIONAL RUNS TO GET RESULTS WITH OTHER SEEDS. FOR SPECIFIC FIGURES WITH THE PARAMETERS SHOWN ABOVE
 ################################################################
