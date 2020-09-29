@@ -115,6 +115,8 @@ if __name__ == '__main__':
 
 r"""
 ################################################################
+ALL RUNS ARE AUTOMATICALLY SEEDED
+################################################################
 FIGURE 2
 ################################################################
 if __name__ == '__main__':
@@ -282,5 +284,26 @@ if __name__ == '__main__':
             continue
         else:
             run_on_folder(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
+    print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
+
+
+
+################################################################
+ADDITIONAL RUNS TO GET RESULTS WITH OTHER SEEDS. FOR SPECIFIC FIGURES WITH THE PARAMETERS SHOWN ABOVE
+################################################################
+if __name__ == '__main__':
+    # run a select group of experiments for various seeds.
+    full_start = time.time()
+    folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_43',
+                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_44',
+                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_45',
+                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_46']
+    # rerun this first, as error in automaton..
+    # folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_42']
+    for folder_path in folder_paths:
+        fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
+        seed = int(folder_path.split('_')[-1])
+        for fpath in fpaths:
+            run_on_folder(fpath, random_seed=seed)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 """
