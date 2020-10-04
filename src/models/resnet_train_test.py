@@ -8,6 +8,7 @@ from src.data.mat_data import poisson_noise_loader, mat_data_loader, PoissonNois
 
 
 def test(batchSize, testData, testLabels, Net, dimIn, includePredictionLabels=False, test_eval=False):
+    # test the CNN model
     allAccuracy =[]
     allWrongs = []
     predictions = []
@@ -46,6 +47,7 @@ def test(batchSize, testData, testLabels, Net, dimIn, includePredictionLabels=Fa
 
 
 def train(epochs, batchSize, trainData, trainLabels, testData, testLabels, Net, test_interval, optimizer, criterion, dimIn):
+    # run training loop
     bestTestAcc = 0
     testAcc = 0
     Net.train()
@@ -82,6 +84,26 @@ def train(epochs, batchSize, trainData, trainLabels, testData, testLabels, Net, 
 
 def train_poisson(epochs, numSamplesEpoch, batchSize, meanData, testData, testLabels, Net, test_interval, optimizer, criterion,
                   dimIn, mean_norm, std_norm, train_test_log=None, test_eval=False, PoissonDataObject=None):
+    """
+    Train CNN based on Poisson noise added to mean data signal generated via Matlab/IsetCam
+    :param epochs:
+    :param numSamplesEpoch: of how many samples does an epoch consist? Standard is 10,000
+    :param batchSize:
+    :param meanData:
+    :param testData:
+    :param testLabels:
+    :param Net:
+    :param test_interval: after how many epochs shall a test be performed?
+    :param optimizer:
+    :param criterion:
+    :param dimIn: input dimension
+    :param mean_norm: how is the data normalized? Important to syngergize correctly with pretrained weights
+    :param std_norm: same as mean_norm, but for standard deviation
+    :param train_test_log:
+    :param test_eval:
+    :param PoissonDataObject: object adding poisson noise. Runs on the GPU
+    :return:
+    """
     bestTestAcc = 0
     testAcc = 0
     meanData = torch.from_numpy(meanData).type(torch.float32).cuda()
