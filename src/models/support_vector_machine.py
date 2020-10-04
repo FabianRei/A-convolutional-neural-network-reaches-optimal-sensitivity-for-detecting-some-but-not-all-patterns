@@ -10,12 +10,36 @@ import pickle
 
 
 def score_svm(h5_path, lock, test_data, test_labels, metric='contrast', num_samples=10000, signal_no_signal=False, random_seed=42, **kwargs):
+    """
+    Calculate SVM performance and save to CSV
+    :param h5_path:
+    :param lock:
+    :param test_data:
+    :param test_labels:
+    :param metric:
+    :param num_samples:
+    :param signal_no_signal:
+    :param random_seed:
+    :param kwargs:
+    :return:
+    """
     acc, dprime, metric_val = get_svm_accuracy(h5_path, test_data, test_labels, num_samples, lock=lock,
                                                signal_no_signal=signal_no_signal, random_seed=random_seed, **kwargs)
     write_svm_csv(acc, dprime, metric_val, os.path.dirname(h5_path), lock=lock, metric_name=metric, num_samples=num_samples)
 
 
 def write_svm_csv(acc, dprime, metric, out_path, lock=None, metric_name='contrast', num_samples=10000):
+    """
+    Write SVM testing results to CSV
+    :param acc:
+    :param dprime:
+    :param metric:
+    :param out_path:
+    :param lock:
+    :param metric_name:
+    :param num_samples:
+    :return:
+    """
     if lock is not None:
         lock.acquire()
     svm_csv = os.path.join(out_path, "svm_results_seeded.csv")
@@ -32,6 +56,20 @@ def write_svm_csv(acc, dprime, metric, out_path, lock=None, metric_name='contras
 
 
 def get_svm_accuracy(path_mat, test_data, test_labels, num_samples=10000, lock=None, signal_no_signal=False, random_seed=42, **kwargs):
+    """
+    Train and test a LINEAR svm. uses 10,000 samples. These are less samples compared to the CNN, which generally uses
+    300,000 samples for training. This is ok, as we show that more than 10,000 samples don't yield better SVM performance
+    (Figure A1)
+    :param path_mat:
+    :param test_data:
+    :param test_labels:
+    :param num_samples:
+    :param lock:
+    :param signal_no_signal:
+    :param random_seed:
+    :param kwargs:
+    :return:
+    """
     start = time.time()
     if lock is not None:
         lock.acquire()
