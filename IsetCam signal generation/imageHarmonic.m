@@ -98,6 +98,9 @@ for ii=1:length(freq)
 end
 img = img / length(freq);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% functionality added by Fabian Reith
+% allows the creation of multiple signals, yielding a template with multiple signals.
 gs = parms.signalGridSize;
 if gs > 1
     % move the middle part to the specified location. Uncovered parts (by
@@ -110,7 +113,7 @@ if gs > 1
     end
     img = newImg;
 end
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if lines
     maxVal = max(img(:));
