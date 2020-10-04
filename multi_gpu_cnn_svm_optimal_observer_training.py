@@ -1,9 +1,10 @@
 import os, sys,inspect
+# change PYTHONPATH variable to include specific directories. Important when run from console
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from .src.models.trainFromMatfile import train_cnn_svm_optimal_observer
+from src.models.trainFromMatfile import determine_signal_contrast_cnn_svm_io_performance
 from glob import glob
 import GPUtil
 import multiprocessing as mp
@@ -12,9 +13,9 @@ import datetime
 import os
 import fnmatch
 
-from .src.models.new_inception import inceptionv3
-from .src.models.new_vgg import vgg16, vgg16bn
-from .src.models.new_alexnet import alexnet
+from src.models.new_inception import inceptionv3
+from src.models.new_vgg import vgg16, vgg16bn
+from src.models.new_alexnet import alexnet
 
 
 def matfile_gen(pathMatDir):
@@ -30,23 +31,36 @@ def matfile_gen(pathMatDir):
 
 
 
-def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None, **kwargs):
-    kword_args = {'train_nn': True, 'include_shift': False, 'NetClass': NetClass, 'deeper_pls': deeper_pls,
+def run_across_contrast_levels(dirname, increase_network_depth=False, NetClass=None, NetClass_param=None, **kwargs):
+    """
+    Train CNN, ideal observer & SVM for all contrast levels found within the designated folder
+    :param dirname: designated folder with signal contrast levels as .h5 files
+    :param increase_network_depth: Increase depth of the network. Used for experiments that didn't make it into the paper
+    :param NetClass: Chose CNN used for training. If None, ResNEt50 is used
+    :param NetClass_param: Used to add specific parameter to CNN construction. E.g. used to freeze CNN up to some point.
+    :param kwargs: Other arguments, described in the docs of the
+    :return:
+    """
+    kword_args = {'train_nn': True, 'include_shift': False, 'NetClass': NetClass, 'deeper_pls': increase_network_depth,
                   'NetClass_param': NetClass_param, 'include_angle': False, 'svm': True, 'force_balance': False}
+    # Find all GPUs available on the server
     deviceIDs = GPUtil.getAvailable(order='first', limit=6, maxLoad=0.1, maxMemory=0.1, excludeID=[], excludeUUID=[])
-    # deviceIDs = [1,2,3,4,5,6]
     print(deviceIDs)
+    # measure time passed
     function_start = time.time()
+    # generate all pahts to the corresponding signal .h5 templates
     pathGen = matfile_gen(dirname)
     Procs = {}
     lock = mp.Lock()
+    # run processes that run individual signals on a specified GPU. Run, until all signal .h5 templates/files are
+    # processed
     while True:
         try:
             if Procs == {}:
                 for device in deviceIDs:
                     pathMat = next(pathGen)
                     print(f"Running {pathMat} on GPU {device}")
-                    currP = mp.Process(target=train_cnn_svm_optimal_observer, args=[pathMat],
+                    currP = mp.Process(target=determine_signal_contrast_cnn_svm_io_performance, args=[pathMat],
                                        kwargs={'device': int(device), 'lock': lock, **kword_args, **kwargs})
                     Procs[str(device)] = currP
                     currP.start()
@@ -55,7 +69,7 @@ def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None,
                     time.sleep(30)
                     pathMat = next(pathGen)
                     print(f"Running {pathMat} on GPU {device}")
-                    currP = mp.Process(target=train_cnn_svm_optimal_observer, args=[pathMat],
+                    currP = mp.Process(target=determine_signal_contrast_cnn_svm_io_performance, args=[pathMat],
                                        kwargs={'device': int(device), 'lock': lock, **kword_args, **kwargs})
                     Procs[str(device)] = currP
                     currP.start()
@@ -63,6 +77,8 @@ def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None,
             break
 
         time.sleep(30)
+
+    # wait for all processes to be finished. Then - continue
 
     # this might be faster than proc.join() for all processes
     # (should exclude subprocesses (svm) which can continue running)
@@ -83,32 +99,18 @@ def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None,
     print("done!")
 
 
+# Runs experiment. Each declared path contains .h5 signal arrays of varying contrast levels
 if __name__ == '__main__':
-    # run a select group of experiments for various seeds.
-    full_start = time.time()
-    folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_43',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_44',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_45',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_46']
-    # rerun this first, as error in automaton..
-    # folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_42']
-    for folder_path in folder_paths:
-        fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
-        seed = int(folder_path.split('_')[-1])
+    # FIGURE 2
+    ################################################################
+    if __name__ == '__main__':
+        full_start = time.time()
+        super_path = '/share/wandell/data/reith/redo_experiments/lines_mtf_experiments/mtf_lines_contrast_new_freq'
+        fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
+        fpaths.sort(key=lambda x: int(x.split('_')[-1]))
         for fpath in fpaths:
-            # only run for multiloc (without the ones that already worked
-            # if not 'multiloc_16' in fpath:
-            #     continue
-            if '1dshuff' in fpath:
-                run_on_folder(fpath, shuffled_pixels=-2, random_seed=seed)
-            elif '2dshuff' in fpath:
-                run_on_folder(fpath, shuffled_pixels=1, random_seed=seed)
-            elif 'multiloc' in fpath:
-                run_on_folder(fpath, class_balance='signal_based', random_seed=seed)
-            else:
-                run_on_folder(fpath, random_seed=seed)
-    print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
-
+            run_across_contrast_levels(fpath)
+        print(f"Whole program finished! It took {str( datetime.timedelta(seconds=time.time() - full_start))} hours:min:seconds")
 
 
 
@@ -125,7 +127,7 @@ if __name__ == '__main__':
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
-        run_on_folder(fpath)
+        run_across_contrast_levels(fpath)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -138,7 +140,7 @@ if __name__ == '__main__':
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
-        run_on_folder(fpath, include_shift=True)
+        run_across_contrast_levels(fpath, include_shift=True)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -151,7 +153,7 @@ if __name__ == '__main__':
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     # fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
-        run_on_folder(fpath)
+        run_across_contrast_levels(fpath)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -163,7 +165,7 @@ if __name__ == '__main__':
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     # fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
-        run_on_folder(fpath)
+        run_across_contrast_levels(fpath)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -176,7 +178,7 @@ if __name__ == '__main__':
     fpaths.sort(key=lambda x: int(x.split('x')[-1]))
     for fpath in fpaths:
         s_pixels = int(fpath.split('x')[-1])
-        run_on_folder(fpath, shuffled_pixels=s_pixels, train_nn=False, oo=False)
+        run_across_contrast_levels(fpath, shuffled_pixels=s_pixels, train_nn=False, oo=False)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -188,7 +190,7 @@ if __name__ == '__main__':
     fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/multiple_locations/multiple_locations_experiment_ideal_observer_adjusted_oo') if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     for fpath in fpaths:
-        run_on_folder(fpath, svm=True, train_nn=True)
+        run_across_contrast_levels(fpath, svm=True, train_nn=True)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -202,11 +204,11 @@ if __name__ == '__main__':
     for fpath in fpaths:
         num = fpath.split('_')[-1]
         if num == '2':
-            run_on_folder(fpath, shuffled_pixels=1)
+            run_across_contrast_levels(fpath, shuffled_pixels=1)
         elif num == '3':
-            run_on_folder(fpath, include_shift=True)
+            run_across_contrast_levels(fpath, include_shift=True)
         else:
-            run_on_folder(fpath)
+            run_across_contrast_levels(fpath)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 
@@ -219,11 +221,11 @@ if __name__ == '__main__':
     for fpath in fpaths:
         num = fpath.split('_')[-1]
         if num == '2':
-            run_on_folder(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
         elif num == '3':
-            run_on_folder(fpath, include_shift=True, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, include_shift=True, NetClass=net_class, initial_lr=0.00001)
         else:
-            run_on_folder(fpath, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, NetClass=net_class, initial_lr=0.00001)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 if __name__ == '__main__':
@@ -235,11 +237,11 @@ if __name__ == '__main__':
     for fpath in fpaths:
         num = fpath.split('_')[-1]
         if num == '2':
-            run_on_folder(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
         elif num == '3':
-            run_on_folder(fpath, include_shift=True, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, include_shift=True, NetClass=net_class, initial_lr=0.00001)
         else:
-            run_on_folder(fpath, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, NetClass=net_class, initial_lr=0.00001)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 __________________________________________________________________________________________________________
@@ -254,7 +256,7 @@ if __name__ == '__main__':
     fpaths.sort(key=lambda k: int(k.split("_")[-1]))
     for fpath in fpaths:
         train_set_size = int(fpath.split('_')[-1])
-        run_on_folder(fpath, train_set_size=train_set_size)
+        run_across_contrast_levels(fpath, train_set_size=train_set_size)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -270,7 +272,7 @@ if __name__ == '__main__':
         if num != '2':
             continue
         else:
-            run_on_folder(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 if __name__ == '__main__':
@@ -283,7 +285,7 @@ if __name__ == '__main__':
         if num != '2':
             continue
         else:
-            run_on_folder(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
+            run_across_contrast_levels(fpath, shuffled_pixels=1, NetClass=net_class, initial_lr=0.00001)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 
@@ -303,6 +305,6 @@ if __name__ == '__main__':
         fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
         seed = int(folder_path.split('_')[-1])
         for fpath in fpaths:
-            run_on_folder(fpath, random_seed=seed)
+            run_across_contrast_levels(fpath, random_seed=seed)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 """

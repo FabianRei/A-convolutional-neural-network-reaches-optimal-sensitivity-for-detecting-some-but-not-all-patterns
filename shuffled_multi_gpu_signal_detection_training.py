@@ -3,7 +3,7 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from src.models.trainFromMatfile import train_cnn_svm_optimal_observer
+from src.models.trainFromMatfile import determine_signal_contrast_cnn_svm_io_performance
 from src.models.Resnet import PretrainedResnetFrozen, NotPretrainedResnet
 from glob import glob
 import GPUtil
@@ -41,7 +41,7 @@ def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None,
                 for device in deviceIDs:
                     pathMat = next(pathGen)
                     print(f"Running {pathMat} on GPU {device}")
-                    currP = mp.Process(target=train_cnn_svm_optimal_observer, args=[pathMat],
+                    currP = mp.Process(target=determine_signal_contrast_cnn_svm_io_performance, args=[pathMat],
                                        kwargs={'device': int(device), 'lock': lock, **kword_args, **kwargs})
                     Procs[str(device)] = currP
                     currP.start()
@@ -50,7 +50,7 @@ def run_on_folder(dirname, deeper_pls=False, NetClass=None, NetClass_param=None,
                     time.sleep(30)
                     pathMat = next(pathGen)
                     print(f"Running {pathMat} on GPU {device}")
-                    currP = mp.Process(target=train_cnn_svm_optimal_observer, args=[pathMat],
+                    currP = mp.Process(target=determine_signal_contrast_cnn_svm_io_performance, args=[pathMat],
                                        kwargs={'device': int(device), 'lock': lock, **kword_args, **kwargs})
                     Procs[str(device)] = currP
                     currP.start()
