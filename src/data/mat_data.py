@@ -38,9 +38,26 @@ def get_h5data(pathMat, shuffle=False):
 def get_h5mean_data(pathMat, includeContrast=False, includeShift=False, includeAngle=False, them_cones=False,
                     separate_rgb=False, meanData_rounding=None, shuffled_pixels=False, shuffle_scope=-1,
                     shuffle_portion=-1, ca_rule=-1):
+
+    """
+    Extract mean data template from the .h5 file. Additional tools allow shuffling.
+    :param pathMat: path to .h5 data
+    :param includeContrast:
+    :param includeShift:
+    :param includeAngle:
+    :param them_cones:
+    :param separate_rgb:
+    :param meanData_rounding:
+    :param shuffled_pixels:
+    :param shuffle_scope:
+    :param shuffle_portion:
+    :param ca_rule: allows to create a cellular automaton here. Not used in paper
+    :return:
+    """
     h5Data = h5py.File(pathMat)
     h5Dict = {k:np.array(h5Data[k]) for k in h5Data.keys()}
     args = []
+    # used to process cone data
     if them_cones:
         # 2 = red, 3 = green, 4 = blue
         mosaic = h5Dict['mosaicPattern']
@@ -84,9 +101,10 @@ def get_h5mean_data(pathMat, includeContrast=False, includeShift=False, includeA
             args.append(h5Dict['shift'])
         if includeAngle:
             args.append(h5Dict['rotation'])
+    # used in paper for monochrome sensor signals
     else:
         experiment = h5Dict['noNoiseImg']
-        # rotate 90 degrees
+        # adjust into correct formatting
         experiment = np.transpose(experiment, (0, 2, 1))
         if ca_rule != -1:
             automaton = create_automaton(rule=ca_rule, size=experiment.shape[1:], seed=1337)
@@ -99,6 +117,7 @@ def get_h5mean_data(pathMat, includeContrast=False, includeShift=False, includeA
             print(f"Rounding mean_data to {meanData_rounding} decimals..")
             experiment = np.round(experiment, meanData_rounding)
         # experiment -= 0.567891011121314
+        # shuffle pixels to create alternative signals. Only some of this functionality is used in the paper
         if shuffled_pixels > 0:
             experiment = shuffle_pixels(experiment, shuffled_pixels, shuffle_scope, shuffle_portion)
         elif shuffled_pixels < 0:
@@ -127,6 +146,14 @@ def shuffle_1d(matrices, dimension):
 
 
 def shuffle_pixels(matrices, block_size, shuffle_scope, shuffle_portion):
+    """
+    Shuffle pixels of the signal. Used to assess CNN performance on various pixel localizations
+    :param matrices: signal matrices
+    :param block_size: Shuffle blocks of the image of specific size
+    :param shuffle_scope: only shuffle (coherent) part of the image
+    :param shuffle_portion: shuffle a certain percentage of pixels
+    :return:
+    """
     block_size = int(block_size)
     np.random.seed(42)
     original_width = matrices.shape[-1]

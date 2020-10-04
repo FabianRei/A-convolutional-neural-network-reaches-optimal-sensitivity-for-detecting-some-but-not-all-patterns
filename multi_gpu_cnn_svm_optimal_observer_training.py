@@ -36,9 +36,9 @@ def run_across_contrast_levels(dirname, increase_network_depth=False, NetClass=N
     Train CNN, ideal observer & SVM for all contrast levels found within the designated folder
     :param dirname: designated folder with signal contrast levels as .h5 files
     :param increase_network_depth: Increase depth of the network. Used for experiments that didn't make it into the paper
-    :param NetClass: Chose CNN used for training. If None, ResNEt50 is used
-    :param NetClass_param: Used to add specific parameter to CNN construction. E.g. used to freeze CNN up to some point.
-    :param kwargs: Other arguments, described in the docs of the
+    :param NetClass: choose CNN used for training. If None, ResNEt50 is used
+    :param NetClass_param: used to add specific parameter to CNN construction. E.g. used to freeze CNN up to some point.
+    :param kwargs: other arguments, described in the docs of "determine_signal_contrast_cnn_svm_io_performance
     :return:
     """
     kword_args = {'train_nn': True, 'include_shift': False, 'NetClass': NetClass, 'deeper_pls': increase_network_depth,
