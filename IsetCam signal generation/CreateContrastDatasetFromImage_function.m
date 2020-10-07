@@ -1,21 +1,21 @@
 function CreateContrastDatasetFromImage_function(scanFreq, scanContrast, shiftValues, numSamples, name, outputFolder, imagePath)
 %CREATEDATAFUNCTION Summary of this function goes here
 %   Detailed explanation goes here
-%% Important prameters to set
+%  Important prameters to set
 
 saveName = fullfile(outputFolder, name);
 saveFlag = true;
 
 %% Set up the camera sensor
 
-resolution = [256 256];
+sensor_resolution = [256 256];
 p = harmonicP;
 p.col = 256;
 p.row = 256;
 eTime = 1e-3;
 % fov = 5;
 sensor = sensorCreate('monochrome');
-sensor = sensorSet(sensor,'size',resolution);
+sensor = sensorSet(sensor,'size',sensor_resolution);
 sensor = sensorSet(sensor,'exp time',eTime);
 sensor = sensorSet(sensor,'noise flag',1);
 

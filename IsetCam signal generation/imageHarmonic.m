@@ -103,18 +103,16 @@ img = img / length(freq);
 % allows the creation of multiple signals, yielding a template with multiple signals.
 gs = parms.signalGridSize;
 if gs > 1
-    % move the middle part to the specified location. Uncovered parts (by
-    % this movement) are set to the default value of 1.
-    newImg = ones(size(X));
-    signalPart = img-1;
-    for jj = 1:length(parms.signalLocation)
-        loc = parms.signalLocation(jj);
-        newImg = addSignalToLoc(loc, signalPart, newImg, parms);  
-    end
-    img = newImg;
+    img = createMultipleSignals(parms, img);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Used for the lines experiment. Here, the signal will become a 
+% line instead of a harmonic. This results in the harmonic being
+% either one or zero. To have comparable lines, the ratio of line 
+% to non line has to be comparable. Otherwise, it was tricky for some
+% contrasts. Basically a check, that it's fine + debug information
 if lines
     maxVal = max(img(:));
     minVal = min(img(:));
@@ -135,6 +133,7 @@ if lines
     img(img<=meanVal) = minVal;
     img(img>meanVal) = maxVal;
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if min(img(:) < 0)
     warning('Harmonics have negative sum, not realizable');
