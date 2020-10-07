@@ -290,7 +290,7 @@ if __name__ == '__main__':
 
 
 ################################################################
-ADDITIONAL RUNS TO GET RESULTS WITH OTHER SEEDS. FOR SPECIFIC FIGURES WITH THE PARAMETERS SHOWN ABOVE
+ADDITIONAL RUNS TO GET RESULTS WITH OTHER SEEDS. 
 ################################################################
 if __name__ == '__main__':
     # run a select group of experiments for various seeds.
