@@ -100,19 +100,19 @@ def run_across_contrast_levels(dirname, increase_network_depth=False, NetClass=N
 
 
 # Runs experiment. Each declared path contains .h5 signal arrays of varying contrast levels
+
 if __name__ == '__main__':
-    # FIGURE 2
-    ################################################################
-    if __name__ == '__main__':
-        full_start = time.time()
-        super_path = '/share/wandell/data/reith/redo_experiments/lines_mtf_experiments/mtf_lines_contrast_new_freq'
-        fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
-        fpaths.sort(key=lambda x: int(x.split('_')[-1]))
+    # run automata experiments for various seeds
+    # run a select group of experiments for various seeds.
+    full_start = time.time()
+    super_path = '/share/wandell/data/reith/redo_experiments/sd_automata'
+    folder_paths = glob(os.path.join(super_path, 'seed*'))
+    for folder_path in folder_paths:
+        fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
+        seed = int(folder_path.split('_')[-1])
         for fpath in fpaths:
-            run_across_contrast_levels(fpath)
-        print(f"Whole program finished! It took {str( datetime.timedelta(seconds=time.time() - full_start))} hours:min:seconds")
-
-
+            run_across_contrast_levels(fpath, random_seed=seed)
+    print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 
 r"""
