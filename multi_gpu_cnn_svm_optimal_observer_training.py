@@ -41,7 +41,7 @@ def run_across_contrast_levels(dirname, increase_network_depth=False, NetClass=N
     :param kwargs: other arguments, described in the docs of "determine_signal_contrast_cnn_svm_io_performance
     :return:
     """
-    kword_args = {'train_nn': True, 'include_shift': False, 'NetClass': NetClass, 'deeper_pls': increase_network_depth,
+    kword_args = {'train_nn': True, 'include_shift': False, 'NetClass': NetClass, 'increase_network_depth': increase_network_depth,
                   'NetClass_param': NetClass_param, 'include_angle': False, 'svm': True, 'force_balance': False}
     # Find all GPUs available on the server
     deviceIDs = GPUtil.getAvailable(order='first', limit=6, maxLoad=0.1, maxMemory=0.1, excludeID=[], excludeUUID=[])
