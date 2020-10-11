@@ -107,7 +107,9 @@ if __name__ == '__main__':
     full_start = time.time()
     super_path = '/share/wandell/data/reith/redo_experiments/sd_automata'
     folder_paths = glob(os.path.join(super_path, 'seed*'))
+    sorted(folder_paths)
     for folder_path in folder_paths:
+        print(folder_path)
         fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
         seed = int(folder_path.split('_')[-1])
         for fpath in fpaths:
