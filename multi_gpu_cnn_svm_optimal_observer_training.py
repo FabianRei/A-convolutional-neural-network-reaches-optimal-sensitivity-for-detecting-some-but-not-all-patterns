@@ -106,7 +106,7 @@ if __name__ == '__main__':
     full_start = time.time()
     faces_path = '/share/wandell/data/reith/redo_experiments/sd_faces'
     # folder_paths = ['/share/wandell/data/reith/redo_experiments/multiloc_addition/sd_seed_42']
-    folder_paths = [p.path for p in os.scandir(faces_path) if p.isdir()]
+    folder_paths = [p.path for p in os.scandir(faces_path) if p.is_dir()]
     for folder_path in folder_paths:
         print(folder_path)
         fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
