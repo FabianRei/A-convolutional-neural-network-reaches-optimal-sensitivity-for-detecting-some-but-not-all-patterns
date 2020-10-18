@@ -26,6 +26,17 @@
 
 % Values to set
 
+% imageDir = fullfile(onRootPath,'data','faces','single_faces');
+% imageDir = fullfile(onRootPath,'data','automata');
+%
+% If you need a local directory to write out a temporary file or sub
+% directory, use this
+%
+%    localDir = fullfile(onRootPath,'local');
+%
+% You can put stuff in there and git will not pay any attention to it.
+%
+
 imageDir = 'C:\Users\Fabian\Documents\data\faces\single_faces\';
 imageDir = 'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\redo_automaton\matlab_templates\';
 imageNames = dir([imageDir '*.png']);
@@ -51,6 +62,7 @@ for i = 1:length(imagePaths)
     imagePath = imagePath{1};
     [~,fname,~] = fileparts(imagePath);
     % outputFolder = ['/share/wandell/data/reith/circle_fun/h5_data/' fname '/'];
+    % outputFolder = fullfile(onRootPath,'local','circle_fun','hg_data',fname);
     outputFolder = ['C:\Users\Fabian\Documents\data\windows2rsync\windows_data\redo_automaton\matlab_contrastsiii\' fname '\'];
     status = mkdir(outputFolder);
     for j = 1:length(contrastValues)
