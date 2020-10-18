@@ -62,16 +62,33 @@ def get_contrast_sensitivity(fpath, target_d=1.5):
     return oo_contrast_sensitivity, nn_contrast_sensitivity, svm_contrast_sensitivity
 
 
-def write_results_to_csv(results, super_path):
-    """"""
-    csv_name = f'contrast_sensitivities_{os.path.basename(super_path)}.csv'
+def write_results_to_csv(results, super_path, lite=False, mean_sd_order=False):
+    """
+    Write results inclusive mean & std to csv file
+    :param results: obtained results in a dict
+    :param super_path: path to save csv file to
+    :param lite: write mean & sd only (ignoring the distinct contrast sensitivity values of each seeded run
+    :param mean_sd_order: order all means and then all stds (instead of io_mean, io_std, nn_mean, nn_std..)
+    :return:
+    """
+    if lite:
+        csv_name = f'lite_sens_{os.path.basename(super_path)}.csv'
+    else:
+        csv_name = f'contrast_sensitivities_{os.path.basename(super_path)}.csv'
     csv_path = os.path.join(super_path, csv_name)
     with open(csv_path, 'w', newline='') as f:
-        cols = list(results[list(results.keys())[0]].keys()) + ['mean', 'std']
+        if lite:
+            cols = ['mean', 'std']
+        else:
+            cols = list(results[list(results.keys())[0]].keys()) + ['mean', 'std']
         io_rows = [f'io_{r}' for r in cols]
         nn_rows = [f'nn_{r}' for r in cols]
         svm_rows = [f'svm_{r}' for r in cols]
-        fieldnames = ['mode'] + io_rows + nn_rows + svm_rows
+        if lite and mean_sd_order:
+            fieldnames = ['mode'] + [io_rows[0]] + [nn_rows[0]] + [svm_rows[0]] + [io_rows[1]] + [nn_rows[1]] + [svm_rows[1]]
+        else:
+            fieldnames = ['mode'] + io_rows + nn_rows + svm_rows
+
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for mode in results.keys():
@@ -88,32 +105,52 @@ def write_results_to_csv(results, super_path):
             res_io.extend([np.mean(res_io), np.std(res_io)])
             res_nn.extend([np.mean(res_nn), np.std(res_nn)])
             res_svm.extend([np.mean(res_svm), np.std(res_svm)])
-            for key, val in zip(io_rows, res_io):
-                res_row[key] = val
-            for key, val in zip(nn_rows, res_nn):
-                res_row[key] = val
-            for key, val in zip(svm_rows, res_svm):
-                res_row[key] = val
+            res_length = len(res_io)
+            if lite:
+                start = res_length-2
+            else:
+                start = 0
+            if mean_sd_order and lite:
+                res_row[io_rows[0]] = res_io[start]
+                res_row[nn_rows[0]] = res_nn[start]
+                res_row[svm_rows[0]] = res_svm[start]
+                res_row[io_rows[1]] = res_io[start+1]
+                res_row[nn_rows[1]] = res_nn[start+1]
+                res_row[svm_rows[1]] = res_svm[start+1]
+            else:
+                for key, val in zip(io_rows, res_io[start:]):
+                    res_row[key] = val
+                for key, val in zip(nn_rows, res_nn[start:]):
+                    res_row[key] = val
+                for key, val in zip(svm_rows, res_svm[start:]):
+                    res_row[key] = val
             writer.writerow(res_row)
     return 0
 
 
 
 if __name__ == '__main__':
-    super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment'
-    seed_paths = glob(os.path.join(super_path, 'sd_seed_4[3-6]'))
+    """
+    Contrast sensitivity calculation can be run from here:
+    """
+    # super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment'
+    # seed_paths = glob(os.path.join(super_path, 'sd_seed_4[3-6]'))
+    super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_faces'
+    seed_paths = glob(os.path.join(super_path, '*seed*'))
     results = nested_dict()
     for seed_path in seed_paths:
         seed = seed_path.split('_')[-1]
-        multiloc_paths = glob(os.path.join(seed_path, '*multiloc*'))
-        multiloc_paths = sorted(multiloc_paths, key=lambda x: int(x.split('_')[-1]))
+        multiloc_paths = glob(os.path.join(seed_path, '*'))
+        # multiloc_paths = sorted(multiloc_paths, key=lambda x: int(x.split('_')[-1]))
         for multiloc_path in multiloc_paths:
-            num_locations = multiloc_path.split('_')[-1]
+            # mode = multiloc_path.split('_')[-1]
+            mode = os.path.basename(multiloc_path)
             oo, nn, svm = get_contrast_sensitivity(multiloc_path, 1.5)
-            results[num_locations][seed]['ideal observer'] = oo
-            results[num_locations][seed]['resnet'] = nn
-            results[num_locations][seed]['svm'] = svm
+            results[mode][seed]['ideal observer'] = oo
+            results[mode][seed]['resnet'] = nn
+            results[mode][seed]['svm'] = svm
+    write_results_to_csv(results, super_path, lite=True, mean_sd_order=True)
     write_results_to_csv(results, super_path)
-    fpath = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment\sd_seed_42\multiloc_16'
-    get_contrast_sensitivity(fpath, target_d=1.5)
+    # fpath = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment\sd_seed_42\multiloc_16'
+    # get_contrast_sensitivity(fpath, target_d=1.5)
     print('done')
