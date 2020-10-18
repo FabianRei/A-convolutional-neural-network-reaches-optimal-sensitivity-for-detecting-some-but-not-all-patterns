@@ -325,5 +325,22 @@ if __name__ == '__main__':
         for fpath in fpaths:
             run_across_contrast_levels(fpath, random_seed=seed)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
-
+################################################################
+Multiple seeds for faces
+######################################################
+if __name__ == '__main__':
+    # run automata experiments for various seeds
+    # run a select group of experiments for various seeds.
+    full_start = time.time()
+    faces_path = '/share/wandell/data/reith/redo_experiments/sd_faces'
+    # folder_paths = ['/share/wandell/data/reith/redo_experiments/multiloc_addition/sd_seed_42']
+    folder_paths = [p.path for p in os.scandir(faces_path) if p.is_dir()]
+    for folder_path in folder_paths:
+        print(folder_path)
+        fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
+        seed = int(folder_path.split('_')[-1])
+        for fpath in fpaths:
+            run_across_contrast_levels(fpath, random_seed=seed)
+    print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
+#############################################################
 """
