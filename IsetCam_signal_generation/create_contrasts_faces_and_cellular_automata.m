@@ -26,7 +26,7 @@
 
 % Values to set
 
-% imageDir = fullfile(onRootPath,'data','faces','single_faces');
+% imageDir = fullfile(onRootPath,'data','faces');
 % imageDir = fullfile(onRootPath,'data','automata');
 %
 % If you need a local directory to write out a temporary file or sub
@@ -36,35 +36,28 @@
 %
 % You can put stuff in there and git will not pay any attention to it.
 %
+ieInit
 
-imageDir = 'C:\Users\Fabian\Documents\data\faces\single_faces\';
-imageDir = 'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\redo_automaton\matlab_templates\';
-imageNames = dir([imageDir '*.png']);
-imageNames = dir([imageDir '*.h5']);
+imageDirFaces = fullfile(onRootPath, 'data', 'faces');
+imageDirAutomata = fullfile(onRootPath, 'data', 'automata');
+
+% Choose whether automaton or face signals shall be generated:
+imageDir = imageDirFaces;
+
+imageNames = dir(fullfile(imageDir, '*.h5'));
 imagePaths = fullfile(imageDir, {imageNames.name});
 numSamples = 2;
 frequencies = 1;
-% contrastValues = [0.0003, 0.0002, 0.0004];
 contrastValues = logspace(-5, -1.7, 12);
-% contrastFreqPairs = [];
 shiftValues = 0;
-
-% for i = 1:length(contrastValues)
-%     for j = 1:length(frequencies)       
-%         contrast = contrastValues(i);
-%         freq = frequencies(j);
-%         contrastFreqPairs = cat(1, contrastFreqPairs, [contrast, freq]);
-%     end
-% end
 
 for i = 1:length(imagePaths)
     imagePath = imagePaths(i);
     imagePath = imagePath{1};
     [~,fname,~] = fileparts(imagePath);
-    % outputFolder = ['/share/wandell/data/reith/circle_fun/h5_data/' fname '/'];
-    % outputFolder = fullfile(onRootPath,'local','circle_fun','hg_data',fname);
-    outputFolder = ['C:\Users\Fabian\Documents\data\windows2rsync\windows_data\redo_automaton\matlab_contrastsiii\' fname '\'];
+    outputFolder = fullfile(onRootPath, 'local', 'automata_contrasts', fname);
     status = mkdir(outputFolder);
+    
     for j = 1:length(contrastValues)
         % This creates the resulting datasets
         fprintf('starting at %s\n', datetime('now'))

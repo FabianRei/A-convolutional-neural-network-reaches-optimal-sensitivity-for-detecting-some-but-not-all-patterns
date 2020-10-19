@@ -306,7 +306,7 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     # individual faces
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/face_experiment/single_faces'
+    super_path = '/share/wandell/data/reith/redo_experiments/face_experiment/faces'
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     # fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:

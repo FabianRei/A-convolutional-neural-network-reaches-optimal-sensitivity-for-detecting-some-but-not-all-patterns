@@ -393,7 +393,13 @@ class PoissonNoiseLoaderClass:
 
 
 if __name__ == '__main__':
-    pathMat = "/black/localhome/reith/Desktop/projects/WLDiscriminationNetwork/deepLearning/data/mat_files/10000_samplesPerClass_freq_1_contrast_0_001.h5"
+    # pathMat = "/black/localhome/reith/Desktop/projects/WLDiscriminationNetwork/deepLearning/data/mat_files/10000_samplesPerClass_freq_1_contrast_0_001.h5"
+    pathMat = r"C:\Users\Fabian\stanford\optimal_networks\local\automata_contrasts\face_1\2_samplesPerClass_freq_1_contrast_0_019952623150_image_face_1.h5"
+    pathMat = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\disks\circle_with_radius_27\2_samplesPerClass_freq_1_contrast_0_019952623150_image_circle_with_radius_27.h5'
+    pathMat = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\face_experiment\single_faces\bald_guy\2_samplesPerClass_freq_1_contrast_0_019952623150_image_bald_guy.h5'
     meanData, meanDataLabels = get_h5mean_data(pathMat)
+    from matplotlib import pyplot as plt
+    plt.imshow(meanData[1])
+    plt.show()
     data, labels = poisson_noise_loader(meanData, 16)
     print("done")

@@ -359,7 +359,7 @@ def mtf_calc(mtf_paths, target_d=2., shift=False, angle=False, disks=False, incl
 if __name__ == "__main__":
     # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\mtf_experiments\mtf_shift_new_freq') if f.is_dir()]
     # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\disks_mtf_experiment\disk_experiment_combined') if f.is_dir()]
-    # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment\single_faces') if f.is_dir()]
+    # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment\faces') if f.is_dir()]
     # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\redo_automaton\matlab_contrasts\class3') if f.is_dir()]
     # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\redo_shuffle_blocks') if f.is_dir()]
     # mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\multiple_locations\multiple_locations_experiment_equal_class_dprime_adjusted') if f.is_dir()]
@@ -368,7 +368,7 @@ if __name__ == "__main__":
     mtf_file_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\mtf_experiments\mtf_angle_new_freq_better_csv'
     mtf_file_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\disks_mtf_experiment\disk_experiment_combined_better_csv'
     mtf_file_super_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\more_nn'
-    # mtf_file_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment_reanalyze\single_faces'
+    # mtf_file_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment_reanalyze\faces'
     # mtf_file_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\redo_shuffle_blocks_csv'
     mtf_file_paths = [f.path for f in os.scandir(mtf_file_super_path) if f.is_dir()]
     # mtf_file_paths = [r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\redo_columns']
