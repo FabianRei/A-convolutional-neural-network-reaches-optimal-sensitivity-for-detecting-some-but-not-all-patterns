@@ -19,7 +19,7 @@
 %    when one is enough? - Just for the user to verify that different runs
 %    create the same no noise image. Also, to preserve the dimensional
 %    structure.}
-%    Used to create the "Faces" signals
+%    Used to create the "Faces" and "Disks" signals
 %
 % See Also:
 %    CreateConeAbsorptionSignalNoiseDataset_function
@@ -39,7 +39,7 @@
 ieInit
 
 imageDirFaces = fullfile(onRootPath, 'data', 'faces');
-imageDirAutomata = fullfile(onRootPath, 'data', 'automata');
+imageDirDisks = fullfile(onRootPath, 'data', 'disks');
 
 % Choose whether automaton or face signals shall be generated:
 imageDir = imageDirFaces;
@@ -55,7 +55,7 @@ for i = 1:length(imagePaths)
     imagePath = imagePaths(i);
     imagePath = imagePath{1};
     [~,fname,~] = fileparts(imagePath);
-    outputFolder = fullfile(onRootPath, 'local', 'automata_contrasts', fname);
+    outputFolder = fullfile(onRootPath, 'local', 'faces_contrasts', fname);
     status = mkdir(outputFolder);
     
     for j = 1:length(contrastValues)
@@ -65,7 +65,7 @@ for i = 1:length(imagePaths)
         shiftValue = shiftValues;
         fileName = sprintf('%d_samplesPerClass_freq_%s_contrast_%s_image_%s',numSamples, join(string(frequencies),'-'), strrep(sprintf("%.12f", contrast), '.', '_'), fname);
         disp(fileName);
-        CreateContrastDatasetFromImage_function(frequencies, contrast, shiftValue, numSamples, fileName, outputFolder, imagePath)
+        CreateContrastDataset_disks_and_faces_function(frequencies, contrast, shiftValue, numSamples, fileName, outputFolder, imagePath)
         fprintf('ending at %s\n', datetime('now'))
     end
 end
