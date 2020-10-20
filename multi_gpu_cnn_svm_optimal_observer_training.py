@@ -17,6 +17,8 @@ from src.models.new_inception import inceptionv3
 from src.models.new_vgg import vgg16, vgg16bn
 from src.models.new_alexnet import alexnet
 
+from on_root_path import on_root_path
+
 
 def matfile_gen(pathMatDir):
     """
@@ -104,8 +106,7 @@ if __name__ == '__main__':
     # run automata experiments for various seeds
     # run a select group of experiments for various seeds.
     full_start = time.time()
-    faces_path = '/share/wandell/data/reith/redo_experiments/sd_faces'
-    # folder_paths = ['/share/wandell/data/reith/redo_experiments/multiloc_addition/sd_seed_42']
+    faces_path = os.path.join(on_root_path(), 'local', 'experiment', 'faces')
     folder_paths = [p.path for p in os.scandir(faces_path) if p.is_dir()]
     for folder_path in folder_paths:
         print(folder_path)
@@ -124,7 +125,7 @@ FIGURE 2
 ################################################################
 if __name__ == '__main__':
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/lines_mtf_experiments/mtf_lines_contrast_new_freq'
+    super_path = os.path.join(on_root_path(), 'local', 'experiments', 'harmonic_frequencies')
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
@@ -137,7 +138,7 @@ FIGURE 3
 if __name__ == '__main__':
     # disk mtf calculation. size is in pixel
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/lines_mtf_experiments/mtf_lines_shift_higher_scene_res'
+    super_path = os.path.join(on_root_path(), 'local', 'experiments', 'disks')    
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
@@ -150,7 +151,7 @@ FIGURE 4
 if __name__ == '__main__':
     # individual faces
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/face_experiment/faces'
+    super_path = os.path.join(on_root_path(), 'local', 'experiments', 'faces') 
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     # fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
@@ -162,7 +163,7 @@ FIGURE 5
 ################################################################
 if __name__ == '__main__':
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/redo_automaton/matlab_contrasts'
+    super_path = os.path.join(on_root_path(), 'local', 'experiments', 'automata') 
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     # fpaths.sort(key=lambda x: int(x.split('_')[-1]))
     for fpath in fpaths:
@@ -174,12 +175,12 @@ FIGURE 6
 ################################################################
 if __name__ == '__main__':
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/shuffled_pixels/redo_shuffle_blocks'
+        super_path = os.path.join(on_root_path(), 'local', 'experiments', 'shuffled_pixels') 
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('x')[-1]))
     for fpath in fpaths:
         s_pixels = int(fpath.split('x')[-1])
-        run_across_contrast_levels(fpath, shuffled_pixels=s_pixels, train_nn=False, oo=False)
+        run_across_contrast_levels(fpath, shuffled_pixels=True)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -188,10 +189,10 @@ FIGURE 7
 if __name__ == '__main__':
     full_start = time.time()
     # run only on ideal observer, account for varying sample sizes in calculation
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/multiple_locations/multiple_locations_experiment_ideal_observer_adjusted_oo') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'multiple_locations)) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     for fpath in fpaths:
-        run_across_contrast_levels(fpath, svm=True, train_nn=True)
+        run_across_contrast_levels(fpath)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 ################################################################
@@ -200,7 +201,7 @@ FIGURE 8
 if __name__ == '__main__':
     full_start = time.time()
     # run only on ideal observer, account for varying sample sizes in calculation
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/more_nn/resnet') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'resnet')) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     for fpath in fpaths:
         num = fpath.split('_')[-1]
@@ -216,7 +217,7 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     full_start = time.time()
     # run only on ideal observer, account for varying sample sizes in calculation
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/more_nn/vgg') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'vgg')) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     net_class = vgg16
     for fpath in fpaths:
@@ -232,7 +233,7 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     full_start = time.time()
     # run only on ideal observer, account for varying sample sizes in calculation
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/more_nn/alexnet') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'alexnet')) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     net_class = alexnet
     for fpath in fpaths:
@@ -252,7 +253,7 @@ FIGURE A1
 ################################################################
 if __name__ == '__main__':
     full_start = time.time()
-    super_path = '/share/wandell/data/reith/redo_experiments/sample_number_contrast/resnet'
+    super_path = os.path.join(on_root_path(), 'local', 'experiments', 'sample_number_contrasts')
     fpaths = [p.path for p in os.scandir(super_path) if p.is_dir()]
     fpaths.sort(key=lambda k: int(k.split("_")[-1]))
     for fpath in fpaths:
@@ -265,7 +266,7 @@ FIGURE A2
 ################################################################
 if __name__ == '__main__':
     full_start = time.time()
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/more_nn/vgg') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'vgg')) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     net_class = vgg16
     for fpath in fpaths:
@@ -278,7 +279,7 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     full_start = time.time()
-    fpaths = [p.path for p in os.scandir('/share/wandell/data/reith/redo_experiments/more_nn/alexnet') if p.is_dir()]
+    fpaths = [p.path for p in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'alexnet')) if p.is_dir()]
     fpaths.sort(key=lambda x: int(x.split('_')[-1]), reverse=False)
     net_class = alexnet
     for fpath in fpaths:
@@ -296,12 +297,12 @@ ADDITIONAL RUNS TO GET RESULTS WITH OTHER SEEDS.
 if __name__ == '__main__':
     # run a select group of experiments for various seeds.
     full_start = time.time()
-    folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_43',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_44',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_45',
-                    '/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_46']
-    # rerun this first, as error in automaton..
-    # folder_paths = ['/share/wandell/data/reith/redo_experiments/sd_experiment/sd_seed_42']
+    folder_paths = [os.path.join(on_root_path(), 'local', 'experiments', 'seed42'),
+                    os.path.join(on_root_path(), 'local', 'experiments', 'seed43'),
+                    os.path.join(on_root_path(), 'local', 'experiments', 'seed44'),
+                    os.path.join(on_root_path(), 'local', 'experiments', 'seed45'),
+                    os.path.join(on_root_path(), 'local', 'experiments', 'seed46')]
+    
     for folder_path in folder_paths:
         fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
         seed = int(folder_path.split('_')[-1])
