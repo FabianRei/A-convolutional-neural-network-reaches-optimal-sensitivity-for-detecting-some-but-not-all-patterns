@@ -103,7 +103,7 @@ img = img / length(freq);
 % allows the creation of multiple signals, yielding a template with multiple signals.
 gs = parms.signalGridSize;
 if gs > 1
-    img = createMultipleSignals(parms, img);
+    img = createMultipleSignals(parms, img, X);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -1,4 +1,4 @@
-function [img] = createMultipleSignals(parms,img)
+function [img] = createMultipleSignals(parms,img, X)
 % Add created signals to multiple locations
 %   Detailed explanation goes here
     newImg = ones(size(X));
