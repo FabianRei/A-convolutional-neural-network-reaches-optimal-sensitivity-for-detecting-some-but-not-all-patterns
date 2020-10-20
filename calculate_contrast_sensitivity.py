@@ -147,12 +147,11 @@ if __name__ == '__main__':
         for multiloc_path in multiloc_paths:
             # mode = multiloc_path.split('_')[-1]
             mode = os.path.basename(multiloc_path)
-            oo, nn, svm = get_contrast_sensitivity(multiloc_path, 1.5)
+            oo, nn, svm = get_contrast_sensitivity(multiloc_path)
             results[mode][seed]['ideal observer'] = oo
             results[mode][seed]['resnet'] = nn
             results[mode][seed]['svm'] = svm
     write_results_to_csv(results, super_path, lite=True, mean_sd_order=True)
     write_results_to_csv(results, super_path)
-    # fpath = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment\sd_seed_42\multiloc_16'
-    # get_contrast_sensitivity(fpath, target_d=1.5)
+
     print('done')
