@@ -8,9 +8,9 @@
 %    This image is then processed by a cone absorption function that 
 %    simulates the stimulus generated, would this signal/noise image be 
 %    absorbed by eye cones. The resulting image is then center cropped from
-%    a size of 249x249 to a size of 227x227. This does not affect the 
+%    a size of 249x249 to a size of 238x238. This does not affect the 
 %    created signal pattern itself, as it is pretty much only visible
-%    within the cropped 227x227 center. 
+%    within the cropped 238x238 center. 
 %
 %    "numSamples" images with noise are generated for each frequency, as
 %    well as "numSamples" of images with noise only (-> no signal). For
@@ -27,7 +27,7 @@
 % Values to set
 
 % imageDir = fullfile(onRootPath,'data','faces');
-% imageDir = fullfile(onRootPath,'data','automata');
+% imageDir = fullfile(onRootPath,'data','disks');
 %
 % If you need a local directory to write out a temporary file or sub
 % directory, use this
@@ -42,7 +42,7 @@ imageDirFaces = fullfile(onRootPath, 'data', 'faces');
 imageDirDisks = fullfile(onRootPath, 'data', 'disks');
 
 % Choose whether automaton or face signals shall be generated:
-imageDir = imageDirFaces;
+imageDir = imageDirDisks;
 
 imageNames = dir(fullfile(imageDir, '*.h5'));
 imagePaths = fullfile(imageDir, {imageNames.name});
@@ -55,7 +55,7 @@ for i = 1:length(imagePaths)
     imagePath = imagePaths(i);
     imagePath = imagePath{1};
     [~,fname,~] = fileparts(imagePath);
-    outputFolder = fullfile(onRootPath, 'local', 'faces_contrasts', fname);
+    outputFolder = fullfile(onRootPath, 'local', 'disk_contrasts', fname);
     status = mkdir(outputFolder);
     
     for j = 1:length(contrastValues)

@@ -7,10 +7,10 @@
 %    the signal, there is noise added as well. 
 %    This image is then processed by a cone absorption function that 
 %    simulates the stimulus generated, would this signal/noise image be 
-%    absorbed by eye cones. The resulting image is then center cropped from
-%    a size of 249x249 to a size of 227x227. This does not affect the 
-%    created signal pattern itself, as it is pretty much only visible
-%    within the cropped 227x227 center. 
+%    absorbed by eye cones. The generation for cellular automata is special, as
+%    signals here are of size 256x256. This is done to preserve the intri-
+%    cate pixel structure of the automata input templates that are of size
+%    256x256, as well. 
 %
 %    "numSamples" images with noise are generated for each frequency, as
 %    well as "numSamples" of images with noise only (-> no signal). For
@@ -26,7 +26,6 @@
 
 % Values to set
 
-% imageDir = fullfile(onRootPath,'data','faces');
 % imageDir = fullfile(onRootPath,'data','automata');
 %
 % If you need a local directory to write out a temporary file or sub
@@ -40,8 +39,7 @@ ieInit
 
 imageDirAutomata = fullfile(onRootPath, 'data', 'automata');
 
-% Choose whether automaton or face signals shall be generated:
-imageDir = imageDirFaces;
+imageDir = imageDirAutomata;
 
 imageNames = dir(fullfile(imageDir, '*.h5'));
 imagePaths = fullfile(imageDir, {imageNames.name});
@@ -64,7 +62,7 @@ for i = 1:length(imagePaths)
         shiftValue = shiftValues;
         fileName = sprintf('%d_samplesPerClass_freq_%s_contrast_%s_image_%s',numSamples, join(string(frequencies),'-'), strrep(sprintf("%.12f", contrast), '.', '_'), fname);
         disp(fileName);
-        CreateContrastDatasetFromImage_function(frequencies, contrast, shiftValue, numSamples, fileName, outputFolder, imagePath)
+        CreateContrastDataset_cellular_automata_function(frequencies, contrast, shiftValue, numSamples, fileName, outputFolder, imagePath)
         fprintf('ending at %s\n', datetime('now'))
     end
 end

@@ -97,8 +97,8 @@ end
 
 
 %% Crop
-% imgNoise = imgNoise(11:248, 11:248,:);
-% noNoiseImg = noNoiseImg(11:248, 11:248,:);
+imgNoise = imgNoise(11:248, 11:248,:);
+noNoiseImg = noNoiseImg(11:248, 11:248,:);
 %% Save everything
 
 if(saveFlag)

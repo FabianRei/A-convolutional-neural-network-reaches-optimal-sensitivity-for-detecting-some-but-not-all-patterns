@@ -11,9 +11,9 @@
 %    This image is then processed by a cone absorption function that 
 %    simulates the stimulus generated, would this signal/noise image be 
 %    absorbed by eye cones. The resulting image is then center cropped from
-%    a size of 249x249 to a size of 227x227. This does not affect the 
+%    a size of 249x249 to a size of 238x238. This does not affect the 
 %    created signal pattern itself, as it is pretty much only visible
-%    within the cropped 227x227 center. 
+%    within the cropped 238x238 center. 
 %
 %    "numSamples" images with noise are generated for each frequency, as
 %    well as "numSamples" of images with noise only (-> no signal). For
@@ -23,39 +23,22 @@
 %    create the same no noise image. Also, to preserve the dimensional
 %    structure.}
 %
-% See Also:
-%    CreateConeAbsorptionSignalNoiseDataset_function
+
+ieInit
 
 % Values to set
-% outputFolder = '/share/wandell/data/reith/redo_experiments/sensor_harmonic_contrasts';
-superOutputFolder = 'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\mtf_lines_contrast_new_freq\';
+superOutputFolder = fullfile(onRootPath, 'local', 'harmonic_contrasts');
 mkdir(superOutputFolder);
 numSamples = 1;
 frequencies = 1;
-% contrastValues = [0.0003, 0.0002, 0.0004];
 contrastValues = logspace(-5, -1.7, 12);
-% contrastGrowth = contrastValues(12)/contrastValues(11);
-% contrastValues = [contrastValues contrastValues(12)*contrastGrowth contrastValues(12)*contrastGrowth*contrastGrowth];
 contrastFreqPairs = [];
-% frequencyValues = round(logspace(log10(1), log10(200), 12));
 frequencyValues = round(logspace(log10(1), log10(100), 8));
-% floatFrequencyValues = logspace(log10(1), log10(200), 12);
-% frequencyGrowthVal = floatFrequencyValues(12)/floatFrequencyValues(11);
-% frequencyValues = [frequencyValues frequencyValues(12)*frequencyGrowthVal];
-
-
-% % for i = 1:length(contrastValues)
-% %     for j = 1:length(frequencies)       
-% %         contrast = contrastValues(i);
-% %         freq = frequencies(j);
-% %         contrastFreqPairs = cat(1, contrastFreqPairs, [contrast, freq]);
-% %     end
-% % end
 
 % This creates the resulting datasets
 for f = 1:length(frequencyValues)
     frequencies = frequencyValues(f);
-    outputFolder = [superOutputFolder sprintf('harmonic_frequency_of_%s', string(frequencies))];
+    outputFolder = [superOutputFolder sprintf('_harmonic_frequency_of_%s', string(frequencies))];
     mkdir(outputFolder);
     for i = 1:length(contrastValues)
         fprintf('starting at %s\n', datetime('now'))
