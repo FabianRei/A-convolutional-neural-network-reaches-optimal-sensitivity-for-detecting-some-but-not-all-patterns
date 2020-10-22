@@ -5,7 +5,7 @@ function [newImg] = createMultipleSignals(img,parms)
 %   [newImg] = createMultipleSignals(img,parms)
 %
 % Brief description
-%  Replicates a harmonic image (img) at multiple locations to create a new
+%  Replicates a harmonic image (img) to multiple locations in a new
 %  image.
 %
 %  Expected: img is a harmonic with a mean of 1.

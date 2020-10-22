@@ -22,6 +22,20 @@
 %    when one is enough? - Just for the user to verify that different runs
 %    create the same no noise image. Also, to preserve the dimensional
 %    structure.}
+%    Used to create harmonic signals, used in figure 2 and 6 of our paper.
+%
+% See also:
+%    CreateSensorAbsorptionsSignalNoiseDataset_function
+% 
+% Values to set:
+%   numSamples: Number of samples created with Poisson noise. Generally not
+%   needed as Poisson noise samples are being generated during the training
+%   process
+%   frequencyValues: Various frequencies for which the harmonic signal will
+%   be created for
+%   superOutputFolder: Folder in whicch the generated harmonic frequencies,
+%   as well as their various contrasts, will be saved to
+%   
 %
 
 %%
@@ -33,7 +47,6 @@ if ~exist(superOutputFolder,'dir'), mkdir(superOutputFolder); end
 
 %%
 numSamples = 1;
-frequencies = 1;
 contrastValues = logspace(-5, -1.7, 12);
 contrastFreqPairs = [];
 frequencyValues = round(logspace(log10(1), log10(100), 8));
