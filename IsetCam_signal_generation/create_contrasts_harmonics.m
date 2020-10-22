@@ -24,11 +24,14 @@
 %    structure.}
 %
 
+%%
 ieInit
 
 % Values to set
 superOutputFolder = fullfile(onRootPath, 'local', 'harmonic_contrasts');
-mkdir(superOutputFolder);
+if ~exist(superOutputFolder,'dir'), mkdir(superOutputFolder); end
+
+%%
 numSamples = 1;
 frequencies = 1;
 contrastValues = logspace(-5, -1.7, 12);
@@ -49,3 +52,5 @@ for f = 1:length(frequencyValues)
         fprintf('ending at %s\n', datetime('now'))
     end
 end
+
+%% END

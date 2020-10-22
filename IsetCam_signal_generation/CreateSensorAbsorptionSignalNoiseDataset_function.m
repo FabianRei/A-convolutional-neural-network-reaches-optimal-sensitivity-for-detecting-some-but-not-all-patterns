@@ -1,7 +1,22 @@
 function outFile = CreateSensorAbsorptionSignalNoiseDataset_function(scanFreq, scanContrast, numSamples, name, outputFolder)
-%CREATEDATAFUNCTION Summary of this function goes here
+% Creates a file with images of harmonics based on ISETCam calculations
+%
+% Synopsis
+%  outFile = CreateSensorAbsorptionSignalNoiseDataset_function(scanFreq, scanContrast, numSamples, name, outputFolder)
+%
+% Brief description
+%
+% Inputs
 %   Detailed explanation goes here
-%% Important prameters to set
+%
+% Outputs
+%   outFile:  Full path to the file containing the images
+%
+% Description
+%  Important parameters to set
+%
+% See also
+%
 
 % Examples:
 %{
@@ -46,7 +61,9 @@ noNoiseImgContrast = zeros(length(scanFreq)+1, 1);
 %% Run a loop over all frequencies (1), all contrast strengths (1) and over the number of samples
 k = 1;
 % p.row & p.row are not necessarily the resulting image size, as # scene pixesl > # pixels of
-% sensor, which captures its pixels..
+% sensor, which captures its pixels.
+
+p = imageHparams;
 p.row = 512;
 p.col = 512;
 for cc = 1:length(scanContrast)
@@ -57,7 +74,17 @@ for cc = 1:length(scanContrast)
         else
             p.freq = scanFreq(ff);
         end
+        
+        %{
+          [img,parms] = imageHarmonic(parms);
+          img         = imageReplicate(img,gridlocation,gridsize);
+        
+          % BW:  Do something to make the image a spectral image
+          scene = sceneCreate('harmonic',parms);
+          scene = sceneSet(scene,'photons',img);
+        %}
         scene = sceneCreate('harmonic',p);  % sceneWindow(scene);
+        
         % scene = sceneSet(scene,'fov',fov);  
         oi = oiCreate;
         oi = oiCompute(oi,scene);           % oiWindow(oi);
@@ -103,8 +130,9 @@ if(saveFlag)
         'imgNoiseContrasts', imgNoiseContrasts, ...
         'noNoiseImg', noNoiseImg, ...
         'noNoiseImgFreq', noNoiseImgFreq, ...
-        'noNoiseImgContrast', noNoiseImgContrast);
+        'noNoiseImgContrast', noNoiseImgContrast); %#ok<HDFW>
         
 end
+
 end
 

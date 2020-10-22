@@ -44,14 +44,14 @@ function [img,parms] = imageHarmonic(parms)
 
 if ~exist('parms','var'), parms = []; end
 
-if checkfields(parms,'ang'), ang = parms.ang; else ang = 0; parms.ang = ang; end
-if checkfields(parms,'contrast'), contrast = parms.contrast; else contrast = 1; parms.contrast = contrast; end
-if checkfields(parms,'freq'), freq = parms.freq; else freq = 1; parms.freq = freq; end
-if checkfields(parms,'ph'), ph = parms.ph; else ph = pi/2; parms.ph = ph; end
-if checkfields(parms,'row'), row = parms.row; else row = 64; parms.row = row; end
-if checkfields(parms,'col'), col = parms.col; else col = 64; parms.col = col; end
-if isfield(parms, 'signalGridSize'), dparms.signalGridSize = parms.signalGridSize; else dparms.signalGridSize=1; end
-if isfield(parms, 'signalLocation'), dparms.signalLocation = parms.signalLocation; else dparms.signalLocation=1; end
+if checkfields(parms,'ang'), ang = parms.ang; else, ang = 0; parms.ang = ang; end
+if checkfields(parms,'contrast'), contrast = parms.contrast; else, contrast = 1; parms.contrast = contrast; end
+if checkfields(parms,'freq'), freq = parms.freq; else, freq = 1; parms.freq = freq; end
+if checkfields(parms,'ph'), ph = parms.ph; else, ph = pi/2; parms.ph = ph; end
+if checkfields(parms,'row'), row = parms.row; else, row = 64; parms.row = row; end
+if checkfields(parms,'col'), col = parms.col; else, col = 64; parms.col = col; end
+if isfield(parms, 'signalGridSize'), parms.signalGridSize = parms.signalGridSize; else, parms.signalGridSize=1; end
+if isfield(parms, 'signalLocation'), parms.signalLocation = parms.signalLocation; else, parms.signalLocation=1; end
 
 % The Gabor Flag is a non-zero value that specifies the standard deviation
 % of the Gaussian as a fraction of the image size.  For example, if the
@@ -103,7 +103,7 @@ img = img / length(freq);
 % allows the creation of multiple signals, yielding a template with multiple signals.
 gs = parms.signalGridSize;
 if gs > 1
-    img = createMultipleSignals(parms, img, X);
+    img = createMultipleSignals(img,parms);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
