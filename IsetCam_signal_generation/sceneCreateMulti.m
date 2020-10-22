@@ -1,8 +1,11 @@
-function [outputArg1,outputArg2] = sceneCreateMulti(sceneName,varArgIn)
-%SCENECREATEMULTI Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = sceneName;
-outputArg2 = varArgIn;
+function [scene] = sceneCreateMulti(sceneName,varargin)
+% SCENECREATEMULTI This function integrates parts of the IsetCam library,
+% but then calls imageHarmonicMulti.m instead of imageHarmonic.m.
+% imageHarmonicMulti.m can create signals at specified locations.
+%
+%
+% See also:
+%   imageHarmonicMulti.m
 
 
 %% Initial definition
@@ -16,33 +19,20 @@ sceneName = ieParamFormat(sceneName);
 scene.metadata = [];   % Metadata for machine learning apps
 
 
-%% Handle the Macbeth parameter cases here
-if strncmp(sceneName,'macbeth',5) || ...
-        strcmp(sceneName,'default') || ...
-    strcmp(sceneName,'empty')
-    patchSize = 16; wave = 400:10:700; surfaceFile = 'macbethChart.mat';
-    if ~isempty(varargin), patchSize = varargin{1}; end  % pixels per patch
-    if length(varargin) > 1, wave = varargin{2}; end     % wave
-    if length(varargin) > 2, surfaceFile = varargin{3}; end % Reflectances
-end
-
 switch sceneName
     case {'harmonic','sinusoid'}
         if isempty(varargin)
             [scene,parms] = sceneHarmonic(scene);
         elseif length(varargin) == 1
             parms = varargin{1};
-            [scene,parms] = sceneHarmonic(scene,parms);
         elseif length(varargin) == 2
             parms = varargin{1};
             wave = varargin{2};
-            [scene,parms] = sceneHarmonic(scene,parms, wave);
         else
             error('Wrong number of parameters! Input params structure and optional wavelengths.')
         end
 end
 
-function [scene,p] = sceneHarmonic(scene,parms, wave)
 %% Create a scene of a (windowed) harmonic function.
 %
 % Harmonic parameters are: parms.freq, parms.row, parms.col, parms.ang
@@ -96,7 +86,48 @@ img = img*diag(illP);
 img = XW2RGBFormat(img,r,c);
 scene = sceneSet(scene,'photons',img);
 
-return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Initialize scene geometry, spatial sampling
+scene = sceneInitGeometry(scene);
+scene = sceneInitSpatial(scene);
+
+% Scenes are initialized to a mean luminance of 100 cd/m2.  The illuminant
+% is adjusted so that dividing the radiance (in photons) by the illuminant
+% (in photons) produces a peak reflectance of 0.9.
+%
+% Also, a best guess is made about one known reflectance.
+if checkfields(scene,'data','photons') && ~isempty(scene.data.photons)
+    
+    if isempty(sceneGet(scene,'known reflectance')) && checkfields(scene,'data','photons')
+        % Since there is no known reflectance, we set things up here.  If
+        % there is one, then stuff must have been set up elsewhere.
+        
+        % If there is no illuminant yet, create one with the same
+        % wavelength samples as the scene and a 100 cd/m2 mean luminance
+        if isempty(sceneGet(scene,'illuminant'))
+            il = illuminantCreate('equal photons',sceneGet(scene,'wave'),100);
+            scene = sceneSet(scene,'illuminant',il);
+        end
+        
+        % There is no known scene reflectance, so we set the peak radiance
+        % point as if it has a reflectance of 0.9.
+        v = sceneGet(scene,'peak radiance and wave');
+        wave = sceneGet(scene,'wave');
+        idxWave = find(wave == v(2));
+        p = sceneGet(scene,'photons',v(2));
+        [tmp,ij] = max2(p); %#ok<ASGLU>
+        v = [0.9 ij(1) ij(2) idxWave];
+        scene = sceneSet(scene,'known reflectance',v);
+    end
+    
+    % Calculate and store the scene luminance
+    luminance = sceneCalculateLuminance(scene);
+    scene = sceneSet(scene,'luminance',luminance);
+    
+    % Adjust the mean illumination level to 100 cd/m2.
+    scene = sceneAdjustLuminance(scene,100);
+end
 
 end
 

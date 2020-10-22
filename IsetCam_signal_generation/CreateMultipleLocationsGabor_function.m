@@ -72,6 +72,7 @@ for cc = 1:length(scanContrast)
                 p.signalGridSize = signalGridSize;
             end
             scene = sceneCreate('harmonic',p);  % sceneWindow(scene);
+            scene2 = sceneCreateMulti('harmonic', p);
             % scene = sceneSet(scene,'fov',fov);  
             oi = oiCreate;
             oi = oiCompute(oi,scene);           % oiWindow(oi);
