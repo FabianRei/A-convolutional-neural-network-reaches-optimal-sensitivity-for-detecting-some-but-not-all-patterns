@@ -12,6 +12,7 @@ The network training code is in Python and imports various libraries.
 
 * The directory IsetCam_signal_generation contains the Matlab scripts that generate the stimuli.  The associated figures are in the name of the script (e.g., Fig2_*).
 * The script (multi_gpu_cnn_svm_optimal_observer_training.py) includes multiple sections, labeled by Figure number, that perform the network training and evaluation.
+* The performance data are output into a CSV that is read by calculate_contrast_sensitivty.py to compute the estimated contrast sensitivity value.
 
 
 
