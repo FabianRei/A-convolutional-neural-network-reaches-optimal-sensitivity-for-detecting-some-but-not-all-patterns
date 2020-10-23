@@ -10,9 +10,9 @@ The signal generation code is in Matlab and depends on ISETCam (https://github.c
 
 The network training code is in Python and imports various libraries.
 
-* An script that is an overview of the whole process is:
-* The script that generated the data points in Figure 2 is:
-* The script that generated the data points in Figure 3 is: 
+* The script <> is an overview of the whole computational stream. 
+* Script <> generates the data points in Figure 2
+* Script <> generates the data points in Figure 3
 
 
 
