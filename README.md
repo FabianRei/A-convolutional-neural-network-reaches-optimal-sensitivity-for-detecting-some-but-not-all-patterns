@@ -14,8 +14,7 @@ The network training code is in Python and imports various libraries.
 * The script (multi_gpu_cnn_svm_optimal_observer_training.py) includes multiple sections, labeled by Figure number, that perform the network training and evaluation.
 * The performance data are output into a CSV that is read by calculate_contrast_sensitivty.py to compute the estimated contrast sensitivity value.
 
-
-
+As an example, to reproduce Figure 2 one would run the script to generate the stimuli (e.g., Fig2_<>). Then edit the file multi_gpu_cnn_svm_optimal_observer_training.py, find the section for Figure 2 (nearly line 148), and run it.
 
 
 
