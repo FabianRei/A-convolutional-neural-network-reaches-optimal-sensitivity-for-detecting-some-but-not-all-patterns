@@ -45,7 +45,7 @@ def get_contrast_sensitivity(fpath, target_d=1.5):
     """"
     Get contrast sensitivity from result csv files within "fpath" folder
     """
-
+    print(fpath)
     metric = 'contrast'
     nn_dprimes = get_csv_column(os.path.join(fpath, 'results.csv'), 'nn_dprime', sort_by=metric)
     oo_dprimes = get_csv_column(os.path.join(fpath, 'results.csv'), 'optimal_observer_d_index', sort_by=metric)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     """
     # super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment'
     # seed_paths = glob(os.path.join(super_path, 'sd_seed_4[3-6]'))
-    super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_faces'
+    super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_more_nn'
     seed_paths = glob(os.path.join(super_path, '*seed*'))
     results = nested_dict()
     for seed_path in seed_paths:
@@ -147,11 +147,13 @@ if __name__ == '__main__':
         for multiloc_path in multiloc_paths:
             # mode = multiloc_path.split('_')[-1]
             mode = os.path.basename(multiloc_path)
+            if not '_' in mode:
+                continue
             oo, nn, svm = get_contrast_sensitivity(multiloc_path)
             results[mode][seed]['ideal observer'] = oo
             results[mode][seed]['resnet'] = nn
             results[mode][seed]['svm'] = svm
-    write_results_to_csv(results, super_path, lite=True, mean_sd_order=True)
+    write_results_to_csv(results, super_path, lite=False, mean_sd_order=True)
     write_results_to_csv(results, super_path)
 
     print('done')

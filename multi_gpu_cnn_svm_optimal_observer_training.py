@@ -135,7 +135,14 @@ if __name__ == '__main__':
                 NetClass=alexnet
             else:
                 NetClass=None
-            run_across_contrast_levels(sf, random_seed=seed, NetClass=NetClass)
+            if sf.split('_')[-1] == '2':
+                shuffle_pixels = 1
+            else:
+                shuffle_pixels = False
+            if seed > 42 and not (sf.split('_')[-1] == '2'):
+                continue
+            run_across_contrast_levels(sf, random_seed=seed, NetClass=NetClass, shuffled_pixels=shuffle_pixels)
+
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 
