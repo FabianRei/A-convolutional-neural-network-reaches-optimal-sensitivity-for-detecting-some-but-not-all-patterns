@@ -130,7 +130,7 @@ if __name__ == '__main__':
             print(sf)
             base_sf = os.path.basename(sf)
             network = base_sf.split('_')[0]
-            import pdb; pdb.set_trace()
+            print(network)
             if network == 'vgg':
                 NetClass = vgg16
             elif network == 'alexnet':
