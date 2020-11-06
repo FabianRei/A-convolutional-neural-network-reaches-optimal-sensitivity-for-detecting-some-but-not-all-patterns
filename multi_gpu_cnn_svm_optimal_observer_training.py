@@ -132,17 +132,15 @@ if __name__ == '__main__':
             network = base_sf.split('_')[0]
             import pdb; pdb.set_trace()
             if network == 'vgg':
-                NetClass=vgg16
+                NetClass = vgg16
             elif network == 'alexnet':
-                NetClass=alexnet
+                NetClass = alexnet
             else:
-                NetClass = None
+                continue
             if sf.split('_')[-1] == '2':
                 shuffle_pixels = 1
             else:
                 shuffle_pixels = False
-            if seed > 42 and not (sf.split('_')[-1] == '2'):
-                continue
             run_across_contrast_levels(sf, random_seed=seed, NetClass=NetClass, shuffled_pixels=shuffle_pixels)
 
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
