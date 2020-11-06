@@ -153,7 +153,7 @@ if __name__ == '__main__':
             results[mode][seed]['ideal observer'] = oo
             results[mode][seed]['resnet'] = nn
             results[mode][seed]['svm'] = svm
-    write_results_to_csv(results, super_path, lite=False, mean_sd_order=True)
+    write_results_to_csv(results, super_path, lite=True, mean_sd_order=True)
     write_results_to_csv(results, super_path)
 
     print('done')
