@@ -128,7 +128,7 @@ if __name__ == '__main__':
         seed_folders = [p.path for p in os.scandir(sp) if p.is_dir()]
         for sf in seed_folders:
             print(sf)
-            import pbd; pdb.set_trace()
+            import pdb; pdb.set_trace()
             network = sf.split('_')[0]
             if network == 'vgg':
                 NetClass=vgg16
