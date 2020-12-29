@@ -5,7 +5,7 @@ import os
 from on_root_path import on_root_path
 
 '''
-Show results for scrambled pixels of harmonic. Here, only a part of pixels is being shuffled. 
+Show results for scrambled pixels of harmonic. Here, only a part of pixels is being shuffled.  
 Not used in paper.
 '''
 
