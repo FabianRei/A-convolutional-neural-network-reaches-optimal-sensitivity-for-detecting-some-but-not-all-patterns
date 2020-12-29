@@ -59,13 +59,15 @@ def determine_signal_contrast_cnn_svm_io_performance(pathMat, device=None, lock=
     :param them_cones: experiment that investigates signal on eye cones instead of sensor
     :param separate_rgb: separates RGB. Not used in paper
     :param meanData_rounding: round mean data signal template. Not used in paper
-    :param shuffled_pixels: shuffle pixels
-    :param shuffle_scope: how much of pixels shall be shuffled
+    :param shuffled_pixels: if False or 0 -> no shuffling. Otherwise:
+                            if < 0: Shuffle along certain dimension:
+                            if > 0: Shuffle all pixels (number hints block size)
+    :param shuffle_scope: only shuffle (coherent) part of the image (centered)
     :param test_eval: evaluate performance on test set
     :param random_seed_nn: fixed random seed in pytoch part of CNN as well
     :param train_set_size: size of the training set
     :param test_size: size of the test set
-    :param shuffle_portion: Shuffle certain percentage of pixels
+    :param shuffle_portion: Shuffle certain percentage of (randomly selected) pixels
     :param ca_rule: Create cellular automaton here (not used)
     :param force_balance: Force exact balance of signal/non signal cases in test set
     :param same_test_data_shuff_pixels: ensure that test data have the same shuffle structure
@@ -354,35 +356,4 @@ def determine_signal_contrast_cnn_svm_io_performance(pathMat, device=None, lock=
     sys.stdout = sys.stdout.revert()
 
 
-
-# Runs to verify code, debugging...
-# if __name__ == '__main__':
-#     # mat_path = r'C:\Users\Fabian\Documents\data\svm_test\1_samplesPerClass_freq_1_contrast_oo_0_019952623150.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\mtf_experiments\mtf_contrast_new_freq\harmonic_frequency_of_14\1_samplesPerClass_freq_14_contrast_0_019952623150.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\faces\multi_face_result\2_samplesPerClass_freq_1_contrast_0_019952623150_image_multi_face_result.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\faces\face_sq\2_samplesPerClass_freq_1_contrast_0_019952623150_image_face_sq.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\test_200_dummy2.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\mtf_shift\harmonic_frequency_of_124\2_samplesPerClass_freq_124_contrast_0_10_shift_0_100000000_pi.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\faces\face_guy_green\2_samplesPerClass_freq_1_contrast_0_019952623150_image_face_guy_green.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\mtf_angle_new_freq\harmonic_frequency_of_4/2_samplesPerClass_freq_4_contrast_0_10_angle_0_005336699_pi_oo.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\mtf_lines_angle_new_freq\harmonic_frequency_of_1/1_samplesPerClass_freq_1_contrast_0_10_angle_0_005336699_pi_oo.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\lines_mtf_experiments\mtf_lines_shift_new_freq_lower_values\harmonic_frequency_of_1\1_samplesPerClass_freq_100_contrast_0_10_shift_0_000000001_pi.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\viz_templates\harmonic_frequency_of_1\1_samplesPerClass_freq_52_contrast_0_10_angle_0_125000000_pi_oo.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\disks\circle_with_radius_100\2_samplesPerClass_freq_1_contrast_0_010000000000_image_circle_with_radius_100.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment\multi_face_result\2_samplesPerClass_freq_1_contrast_0_019952623150_image_multi_face_result.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\redo_automaton\plain_automata\plain_automata_rule_3_class2\automata_rule_3_class2_contrast_0.01995262.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\disks\disk_templates\circle_with_radius_100.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\multiple_locations_templates\harmonic_frequency_of_1_loc_1_signalGridSize_4\1_samplesPerClass_freq_1_contrast_0_798104925988_loc_1_signalGrid_4.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\multiple_locations\multiple_locations_experiment\harmonic_frequency_of_1_loc_1_signalGridSize_4\1_samplesPerClass_freq_1_contrast_0_012649110641_loc_1_signalGrid_4.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\multiple_locations_templates\harmonic_frequency_of_1_loc_4_signalGridSize_3\1_samplesPerClass_freq_1_contrast_0_798104925988_loc_4_signalGrid_3.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\multiple_locations_templates\harmonic_frequency_of_1_loc_1_signalGridSize_3\1_samplesPerClass_freq_1_contrast_0_798104925988_loc_1_signalGrid_3.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\multiple_locations_templates\harmonic_frequency_of_1_loc_1_signalGridSize_2\1_samplesPerClass_freq_1_contrast_0_798104925988_loc_1_signalGrid_2.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\windows2rsync\windows_data\multiple_locations_templates\harmonic_frequency_of_1_loc_1_signalGridSize_1\1_samplesPerClass_freq_1_contrast_0_798104925988_loc_1_signalGrid_1.h5'
-#     # mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\more_nn_backup\vgg\class_2_rule_3_5\2_samplesPerClass_freq_1_contrast_0_002511886432_image_automata_rule_3_class2.h5'
-#     mat_path = '/share/wandell/data/reith/redo_experiments/more_nn/vgg/class_2_rule_3_5/2_samplesPerClass_freq_1_contrast_0_001258925412_image_automata_rule_3_class2.h5'
-#     mat_path = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\redo_automaton\matlab_contrasts\automata_rule_22_class3\2_samplesPerClass_freq_1_contrast_0_019952623150_image_automata_rule_22_class3.h5'
-#     determine_signal_contrast_cnn_svm_io_performance(mat_path, shuffled_pixels=False, test_size=400, train_nn=True, oo=False, svm=False, NetClass=vgg16)
-#     # autoTrain_Resnet_optimalObserver(mat_path, force_balance=True, shuffled_pixels=-2)
-#     # autoTrain_Resnet_optimalObserver(mat_path, shuffled_pixels=-2)
-#     # autoTrain_Resnet_optimalObserver(mat_path, shuffled_pixels=True, shuffle_scope=100, train_set_size=150, oo=False, svm=False, test_size=60, train_nn=True, shuffle_portion=2000)
 
