@@ -102,47 +102,18 @@ def run_across_contrast_levels(dirname, increase_network_depth=False, NetClass=N
 
 
 # Runs experiment. Each declared path contains .h5 signal arrays of varying contrast levels
-# if __name__ == '__main__':
-#     # run automata experiments for various seeds
-#     # run a select group of experiments for various seeds.
-#     full_start = time.time()
-#     faces_path = os.path.join(on_root_path(), 'local', 'experiment', 'faces')
-#     folder_paths = [p.path for p in os.scandir(faces_path) if p.is_dir()]
-#     for folder_path in folder_paths:
-#         print(folder_path)
-#         fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
-#         seed = int(folder_path.split('_')[-1])
-#         for fpath in fpaths:
-#             run_across_contrast_levels(fpath, random_seed=seed)
-#     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
-
-
 if __name__ == '__main__':
     # run automata experiments for various seeds
     # run a select group of experiments for various seeds.
     full_start = time.time()
-    super_path = r'/share/wandell/data/reith/redo_experiments/sd_more_nn'
-    seed_paths = [p.path for p in os.scandir(super_path) if p.is_dir()]
-    for sp in seed_paths:
-        seed = int(sp.split('_')[-1])
-        seed_folders = [p.path for p in os.scandir(sp) if p.is_dir()]
-        for sf in seed_folders:
-            print(sf)
-            base_sf = os.path.basename(sf)
-            network = base_sf.split('_')[0]
-            print(network)
-            if network == 'vgg':
-                NetClass = vgg16
-            elif network == 'alexnet':
-                NetClass = alexnet
-            else:
-                continue
-            if sf.split('_')[-1] == '2':
-                shuffle_pixels = 1
-            else:
-                shuffle_pixels = False
-            run_across_contrast_levels(sf, random_seed=seed, NetClass=NetClass, shuffled_pixels=shuffle_pixels)
-
+    faces_path = os.path.join(on_root_path(), 'local', 'experiment', 'faces')
+    folder_paths = [p.path for p in os.scandir(faces_path) if p.is_dir()]
+    for folder_path in folder_paths:
+        print(folder_path)
+        fpaths = [p.path for p in os.scandir(folder_path) if p.is_dir()]
+        seed = int(folder_path.split('_')[-1])
+        for fpath in fpaths:
+            run_across_contrast_levels(fpath, random_seed=seed)
     print(f"Whole program finished! It took {str(datetime.timedelta(seconds=time.time()-full_start))} hours:min:seconds")
 
 

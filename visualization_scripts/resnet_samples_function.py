@@ -3,6 +3,11 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 import types
+from on_root_path import on_root_path
+
+'''
+Visualize results of ResNet performance based on number of samples used for training
+'''
 
 
 def line_styler(offset_default=2, style=(2, 2)):
@@ -221,16 +226,10 @@ def pixel_blocks_specific_contrast(comparison_folder, sample_folders, selected_c
 
 if __name__ == "__main__":
     selected_contrast = 6.30957344e-04
-    block_folders = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\sample_number_contrast\resnet') if f.is_dir()]
-    comparison_folder = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\experiment_patches_238x238'
+    block_folders = [f.path for f in os.scandir(os.path.join(on_root_path(), 'local', 'experiment', 'resnet')) if f.is_dir()]
+    comparison_folder = os.path.join(on_root_path(), 'local', 'experiment', 'experiment_patches_238x238')
     pixel_blocks_specific_contrast(comparison_folder, block_folders, selected_contrast, plot_style='-')
     selected_contrast = 1.25892541e-03
     pixel_blocks_specific_contrast(comparison_folder, block_folders, selected_contrast, plot_style='-')
     selected_contrast = 0.00031622776601683794
     pixel_blocks_specific_contrast(comparison_folder, block_folders, selected_contrast, plot_style='-')
-    # block_folders.sort(key=lambda k: int(k.split('_')[-1]))
-    # for block_folder in block_folders:
-    #     size = int(block_folder.split('_')[-1])
-    #     if size in [107689]:
-    #         continue
-    #     visualize_pixel_blocks(comparison_folder, block_folder, include_svm=True)

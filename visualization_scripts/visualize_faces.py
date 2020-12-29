@@ -2,7 +2,11 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
 import os
-import bisect
+from on_root_path import on_root_path
+
+'''
+Visualize results of face detection experiment
+'''
 
 
 def line_styler(offset_default=2, style=(2, 2)):
@@ -81,6 +85,6 @@ def visualize_face(block_folder, shift=False, angle=False, include_oo=True, incl
 
 
 if __name__ == "__main__":
-    mtf_paths = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\face_experiment') if f.is_dir()]
-    for scope_folder in mtf_paths:
+    face_paths = [f.path for f in os.scandir(os.path.join(on_root_path(), 'local', 'experiments', 'faces')) if f.is_dir()]
+    for scope_folder in face_paths:
         visualize_face(scope_folder)

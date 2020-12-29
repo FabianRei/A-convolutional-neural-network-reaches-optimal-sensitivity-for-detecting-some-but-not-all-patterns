@@ -2,6 +2,12 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
 import os
+from on_root_path import on_root_path
+
+'''
+Show results for scrambled pixels of harmonic. Here, only a part of pixels is being shuffled. 
+Not used in paper.
+'''
 
 def line_styler(offset_default=2, style=(2, 2)):
     offset = offset_default
@@ -137,8 +143,8 @@ def pixel_blocks_specific_contrast(block_folders, selected_contrast, shift=False
 
 if __name__ == "__main__":
     selected_contrast = 6.30957344e-04
-    scope_folders = [f.path for f in os.scandir(r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\different_shuffle_portion') if f.is_dir()]
-    comparison_folder = r'C:\Users\Fabian\Documents\data\rsync\redo_experiments\shuffled_pixels\experiment_patches_238x238'
+    scope_folders = [f.path for f in os.scandir(os.path.join(on_root_path(), 'local', 'experiment', 'different_shuffle_portion')) if f.is_dir()]
+    comparison_folder = os.path.join(on_root_path(), 'local', 'experiment', 'experiment_patches_238x238')
     pixel_blocks_specific_contrast(scope_folders, selected_contrast)
     selected_contrast = 1.25892541e-03
     pixel_blocks_specific_contrast(scope_folders, selected_contrast)
