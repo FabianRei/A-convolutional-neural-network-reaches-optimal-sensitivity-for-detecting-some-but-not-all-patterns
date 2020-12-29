@@ -13,6 +13,15 @@ def nested_dict():
 
 
 def get_csv_column(csv_path, col_name, sort_by=None, exclude_from=None):
+    '''
+    Simple function to extract column of csv tabe. Used to extract data from results.csv file.
+    Assume ';' as delimiter. If not, use ','.
+    :param csv_path:
+    :param col_name:
+    :param sort_by:
+    :param exclude_from:
+    :return:
+    '''
     try:
         df = pd.read_csv(csv_path, delimiter=';')
         col = df[col_name].tolist()
@@ -43,7 +52,10 @@ def get_interpolation(dprimes, target_d, metric_values):
 
 def get_contrast_sensitivity(fpath, target_d=1.5):
     """"
-    Get contrast sensitivity from result csv files within "fpath" folder
+    Get contrast sensitivity from result csv files within "fpath" folder.
+    Contrast sensitivity is the sensitivity (1/contrast) required to reach a declared target d' (in our paper, this is
+    at 1.5). Given no experiment reaches a d' of exactly 1.5, we linearly interpolate from the two adjacent contrast
+    values.
     """
     print(fpath)
     metric = 'contrast'
@@ -135,17 +147,13 @@ if __name__ == '__main__':
     """
     Contrast sensitivity calculation can be run from here:
     """
-    # super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_experiment'
-    # seed_paths = glob(os.path.join(super_path, 'sd_seed_4[3-6]'))
-    super_path = r'C:\Users\Fabian\Documents\rsync_csv\redo_experiments\sd_more_nn'
+    super_path = os.path.join(on_root_path(), 'local', 'experiment', 'faces')
     seed_paths = glob(os.path.join(super_path, '*seed*'))
     results = nested_dict()
     for seed_path in seed_paths:
         seed = seed_path.split('_')[-1]
         multiloc_paths = glob(os.path.join(seed_path, '*'))
-        # multiloc_paths = sorted(multiloc_paths, key=lambda x: int(x.split('_')[-1]))
         for multiloc_path in multiloc_paths:
-            # mode = multiloc_path.split('_')[-1]
             mode = os.path.basename(multiloc_path)
             if not '_' in mode:
                 continue
@@ -155,5 +163,4 @@ if __name__ == '__main__':
             results[mode][seed]['svm'] = svm
     write_results_to_csv(results, super_path, lite=True, mean_sd_order=True)
     write_results_to_csv(results, super_path)
-
     print('done')
