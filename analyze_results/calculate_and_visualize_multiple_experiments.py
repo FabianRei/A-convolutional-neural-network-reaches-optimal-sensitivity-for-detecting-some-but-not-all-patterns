@@ -317,6 +317,7 @@ if __name__ == "__main__":
     mtf_paths = [f.path for f in os.scandir(os.path.join(on_root_path(), 'local', 'experiment', 'faces')) if f.is_dir()]
     for scope_folder in mtf_paths:
         visualize_pixel_blocks(scope_folder)
+
     mtf_calc(mtf_paths, target_d=1.5)
     mtf_calc(mtf_paths, target_d=2)
     mtf_calc(mtf_paths, target_d=1)
